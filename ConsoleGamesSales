@@ -1,0 +1,30 @@
+-- Calculate what % of Global Sales were made in North America
+SELECT
+round(SUM(NA_Sales),2) AS Total_Sales_North_America,
+round(sum(EU_Sales), 2) AS Total_Sales_Europe,
+round(Sum(JP_Sales), 2) AS Total_Sales_Japan,
+round(Sum(Other_Sales), 2) AS Total_Sales_Others,
+ROUND(SUM(NA_Sales)/SUM(NA_Sales + EU_Sales + JP_Sales + Other_Sales)*100, 2)AS PCT_North_America_Sales
+FROM consolegames;
+
+-- Extract a view of the console game titles ordered by platform name in			
+-- ascending order and year of release in descending order
+SELECT Name, Platform, Year FROM consolegames
+ORDER BY platform ASC, Year DESC;
+
+-- Display All Console Platform which were released either just before 
+-- Black Friday or Just Before Christmas (in any year)
+SELECT Platform FROM consoledates
+WHERE Date(FirstRetailAvailability) LIKE "%%%%-11-22" OR
+Date(FirstRetailAvailability) LIKE "%%%%-12-24";
+
+-- Order the Platform by their longevity in ascending order 
+SELECT Platform, datediff(Discontinued, FirstRetailAvailability) AS Longevity FROM consoledates
+WHERE datediff(Discontinued, FirstRetailAvailability) IS NOT NULL
+ORDER BY Longevity ASC;
+
+-- Demonstrate how to deal with Game_Year column if the client wants
+-- to convert it to a different data type
+ALTER TABLE consolegames
+MODIFY column year YEAR;
+
